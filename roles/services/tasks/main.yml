@@ -1,0 +1,23 @@
+---
+- name: Ensure service directory exists
+  file:
+    path: /opt/services
+    state: directory
+    mode: "0755"
+
+- name: Template docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/services/docker-compose.yml
+    mode: "0644"
+
+- name: Template nginx config file
+  template:
+    src: nginx-development-gateway.conf.j2
+    dest: /opt/services/nginx-development-gateway.conf
+    mode: "0644"
+
+- name: Bring up services with docker compose
+  shell: docker compose -f /opt/services/docker-compose.yml up -d
+  args:
+    chdir: /opt/services

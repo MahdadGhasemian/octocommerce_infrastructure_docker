@@ -1,0 +1,54 @@
+---
+# Nginx
+nginx_image: nginx:latest
+nginx_container_name: nginx
+nginx_port: 80
+nginx_conf_path: /opt/services/nginx-development-gateway.conf
+
+# PostgreSQL
+postgres_image: postgres:15
+postgres_container_name: postgres
+postgres_db: postgres
+postgres_user: user
+postgres_password: password
+postgres_port: 5432
+postgres_volume_name: postgres_data
+
+# PgAdmin
+pgadmin_image: elestio/pgadmin
+pgadmin_container_name: pgadmin
+pgadminq_user: test@test.ir
+pgadmin_password: randompassword2
+pgadmin_listen_port: 8080
+pgadmin_port: 8088
+pgadmin_volume_name: pgadmin_data
+
+# RabbitMQ
+rabbitmq_image: rabbitmq:3.10-management
+rabbitmq_container_name: rabbitmq
+rabbitmq_port: 15672
+rabbitmq_user: user
+rabbitmq_password: password
+rabbitmq_volume_name: rabbitmq_data
+
+# Redis
+redis_image: bitnami/redis
+redis_container_name: redis
+redis_port: 6379
+redis_password: password
+redis_volume_name: redis_data
+
+# Redis Insight
+redis_insight_image: redis/redisinsight
+redis_insight_container_name: redisinsight
+redis_insight_port: 5540
+redis_insight_volume_name: redisinsight_data
+
+# Minio
+minio_image: bitnami/minio
+minio_container_name: minio
+minio_server_port: 9000
+minio_console_port: 9001
+minio_root_user: admin
+minio_root_password: randompassword
+minio_volume_name: minio_data
