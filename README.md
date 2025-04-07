@@ -5,6 +5,13 @@ ansible-playbook playbooks/check_connection.yml -i inventory.yml
 ansible-playbook playbooks/setup.yml -i inventory.yml
 ```
 
+# Web UI Tools
+
+- [PgAdmin](https://pgadmin.octocommerce.ir/)
+- [Rabbitmq UI](https://rabbitmq.octocommerce.ir/)
+- [Redis GUI](https://redisinsight.octocommerce.ir/)
+- [Minio UI](https://minio.octocommerce.ir/)
+
 ## Generate .htpasswd file for redis inside login page
 
 ```bash
