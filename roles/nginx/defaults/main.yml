@@ -1,4 +1,0 @@
----
-domains:
-  - domain: example.com
-    service_port: 8000

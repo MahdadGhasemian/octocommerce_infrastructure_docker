@@ -1,0 +1,83 @@
+# RabbitMQ
+server {
+    listen 443 ssl;
+    listen [::]:443;
+    server_name {{ nginx_server_name_rabbitmq }};
+
+    client_max_body_size 100M;
+
+    ssl_certificate /etc/nginx/ssl/ssl_certificate.crt;
+    ssl_certificate_key /etc/nginx/ssl/ssl_certificate.key;
+
+    location / {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        proxy_pass http://{{ rabbitmq_container_name }}:{{ rabbitmq_container_port }};
+    }
+}
+
+# Minio
+server {
+    listen 443 ssl;
+    listen [::]:443;
+    server_name {{ nginx_server_name_minio_console }};
+
+    client_max_body_size 100M;
+
+    ssl_certificate /etc/nginx/ssl/ssl_certificate.crt;
+    ssl_certificate_key /etc/nginx/ssl/ssl_certificate.key;
+
+    location / {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        proxy_pass http://{{ minio_container_name }}:{{ minio_console_container_port }};
+    }
+}
+
+# PgAdmin
+server {
+    listen 443 ssl;
+    listen [::]:443;
+    server_name {{ nginx_server_name_pgadmin }};
+
+    client_max_body_size 100M;
+
+    ssl_certificate /etc/nginx/ssl/ssl_certificate.crt;
+    ssl_certificate_key /etc/nginx/ssl/ssl_certificate.key;
+
+    location / {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        proxy_pass http://{{ pgadmin_container_name }}:{{ pgadmin_container_port }};
+    }
+}
+
+# Redis Insight
+server {
+    listen 443 ssl;
+    listen [::]:443;
+    server_name {{ nginx_server_name_redis_insight }};
+
+    client_max_body_size 100M;
+
+    ssl_certificate /etc/nginx/ssl/ssl_certificate.crt;
+    ssl_certificate_key /etc/nginx/ssl/ssl_certificate.key;
+
+    location / {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        proxy_pass http://{{ redis_insight_container_name }}:{{ redis_insight_container_port }};
+    }
+}

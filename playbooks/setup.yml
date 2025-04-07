@@ -4,5 +4,27 @@
   become: true
   gather_facts: true
   roles:
-    - docker
-    - services
+    - role: docker
+    - role: services
+      vars:
+        nginx_server_name_pgadmin: "{{ pgadmin_domain_name }}"
+        nginx_server_name_redis_insight: "{{ redis_insight_domain_name }}"
+        nginx_server_name_rabbitmq: "{{ rabbitmq_domain_name }}"
+        nginx_server_name_minio_console: "{{ minio_domain_name }}"
+
+        postgres_user: "{{ creds.postgres_user }}"
+        postgres_password: "{{ creds.postgres_password }}"
+
+        pgadmin_user: "{{ creds.pgadmin_user }}"
+        pgadmin_password: "{{ creds.pgadmin_password }}"
+
+        rabbitmq_user: "{{ creds.rabbitmq_user }}"
+        rabbitmq_password: "{{ creds.rabbitmq_password }}"
+
+        redis_password: "{{ creds.redis_password }}"
+
+        redis_insight_user: "{{ creds.redis_insight_user }}"
+        redis_insight_password: "{{ creds.redis_insight_password }}"
+
+        minio_root_user: "{{ creds.minio_root_user }}"
+        minio_root_password: "{{ creds.minio_root_password }}"

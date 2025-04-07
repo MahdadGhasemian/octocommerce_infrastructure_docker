@@ -1,23 +1,40 @@
 ---
 - name: Ensure service directory exists
   file:
-    path: /opt/services
+    path: "{{ service_directory_path }}"
     state: directory
     mode: "0755"
+
+- name: Copy SSL certificate
+  copy:
+    src: files/ssl_certificate.crt
+    dest: "{{ nginx_ssl_certificate }}"
+    mode: "0644"
+
+- name: Copy SSL key
+  copy:
+    src: files/ssl_certificate.key
+    dest: "{{ nginx_ssl_certificate_key }}"
+    mode: "0600"
+
+- name: Template nginx config file
+  template:
+    src: nginx.conf.j2
+    dest: "{{ nginx_conf_path }}"
+    mode: "0644"
 
 - name: Template docker-compose.yml
   template:
     src: docker-compose.yml.j2
-    dest: /opt/services/docker-compose.yml
+    dest: "{{ docker_compose_file_path }}"
     mode: "0644"
 
-- name: Template nginx config file
-  template:
-    src: nginx-development-gateway.conf.j2
-    dest: /opt/services/nginx-development-gateway.conf
-    mode: "0644"
+- name: Bring down existing containers
+  shell: docker compose -f {{ docker_compose_file_path }} down
+  args:
+    chdir: "{{ service_directory_path }}"
 
 - name: Bring up services with docker compose
-  shell: docker compose -f /opt/services/docker-compose.yml up -d
+  shell: docker compose -f {{ docker_compose_file_path }} up -d
   args:
-    chdir: /opt/services
+    chdir: "{{ service_directory_path }}"

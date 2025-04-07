@@ -1,54 +1,73 @@
 ---
+# General
+service_directory_path: /opt/services
+docker_compose_file_path: "{{ service_directory_path }}/docker-compose.yml"
+
 # Nginx
 nginx_image: nginx:latest
 nginx_container_name: nginx
-nginx_port: 80
-nginx_conf_path: /opt/services/nginx-development-gateway.conf
+nginx_http_port: 80
+nginx_https_port: 443
+nginx_conf_path: "{{ service_directory_path }}/nginx.conf"
+nginx_ssl_certificate: "{{ service_directory_path }}/ssl_certificate.crt"
+nginx_ssl_certificate_key: "{{ service_directory_path }}/ssl_certificate.key"
+nginx_server_name_pgadmin: pgadmin.test.ir
+nginx_server_name_redis_insight: redisinsight.test.ir
+nginx_server_name_rabbitmq: rabbitmq.test.ir
+nginx_server_name_minio_console: minio.test.ir
 
 # PostgreSQL
 postgres_image: postgres:15
 postgres_container_name: postgres
+postgres_container_port: 5432
 postgres_db: postgres
-postgres_user: user
-postgres_password: password
-postgres_port: 5432
+postgres_user: admin
+postgres_password: randompassword
+postgres_port:
 postgres_volume_name: postgres_data
 
 # PgAdmin
 pgadmin_image: elestio/pgadmin
 pgadmin_container_name: pgadmin
-pgadminq_user: test@test.ir
-pgadmin_password: randompassword2
-pgadmin_listen_port: 8080
-pgadmin_port: 8088
+pgadmin_user: test@test.ir
+pgadmin_password: randompassword
+pgadmin_container_port: 8080
+pgadmin_port:
 pgadmin_volume_name: pgadmin_data
 
 # RabbitMQ
 rabbitmq_image: rabbitmq:3.10-management
 rabbitmq_container_name: rabbitmq
-rabbitmq_port: 15672
-rabbitmq_user: user
-rabbitmq_password: password
+rabbitmq_container_port: 15672
+rabbitmq_port:
+rabbitmq_user: admin
+rabbitmq_password: randompassword
 rabbitmq_volume_name: rabbitmq_data
 
 # Redis
 redis_image: bitnami/redis
 redis_container_name: redis
-redis_port: 6379
-redis_password: password
+redis_container_port: 6379
+redis_port:
+redis_password: randompassword
 redis_volume_name: redis_data
 
 # Redis Insight
 redis_insight_image: redis/redisinsight
 redis_insight_container_name: redisinsight
-redis_insight_port: 5540
+redis_insight_container_port: 5540
+redis_insight_port:
+redis_insight_user: admin
+redis_insight_password: randompassword
 redis_insight_volume_name: redisinsight_data
 
 # Minio
 minio_image: bitnami/minio
 minio_container_name: minio
-minio_server_port: 9000
-minio_console_port: 9001
+minio_server_container_port: 9000
+minio_console_container_port: 9001
+minio_server_port:
+minio_console_port:
 minio_root_user: admin
 minio_root_password: randompassword
 minio_volume_name: minio_data
