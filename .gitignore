@@ -44,6 +44,6 @@ inventory/*.yml
 inventory/*.ini
 inventory-init.yml
 
-
-# Others
-**/roles/nginx/files/minio-*
+**/.htpasswd
+**/ssl_certificate.crt
+**/ssl_certificate.key

@@ -23,6 +23,12 @@
     dest: "{{ nginx_conf_path }}"
     mode: "0644"
 
+- name: Copy .htpasswd file for RedisInsight authentication
+  copy:
+    src: files/.htpasswd
+    dest: "{{ redis_inside_auth_htpasswd }}"
+    mode: "0644"
+
 - name: Template docker-compose.yml
   template:
     src: docker-compose.yml.j2

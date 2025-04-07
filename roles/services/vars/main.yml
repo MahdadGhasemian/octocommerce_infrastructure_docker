@@ -57,8 +57,7 @@ redis_insight_image: redis/redisinsight
 redis_insight_container_name: redisinsight
 redis_insight_container_port: 5540
 redis_insight_port:
-redis_insight_user: admin
-redis_insight_password: randompassword
+redis_inside_auth_htpasswd: "{{ service_directory_path }}/.htpasswd"
 redis_insight_volume_name: redisinsight_data
 
 # Minio

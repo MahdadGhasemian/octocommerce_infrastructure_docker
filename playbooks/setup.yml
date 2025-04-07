@@ -23,8 +23,5 @@
 
         redis_password: "{{ creds.redis_password }}"
 
-        redis_insight_user: "{{ creds.redis_insight_user }}"
-        redis_insight_password: "{{ creds.redis_insight_password }}"
-
         minio_root_user: "{{ creds.minio_root_user }}"
         minio_root_password: "{{ creds.minio_root_password }}"
