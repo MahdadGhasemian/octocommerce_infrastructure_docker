@@ -18,6 +18,8 @@ services:
       - rabbitmq
       - redis-insight
       - minio
+      - auth
+      - store
 
   postgres:
     image: {{ postgres_image }}
@@ -62,9 +64,14 @@ services:
       RABBITMQ_DEFAULT_PASS: {{ rabbitmq_password }}
     volumes:
       - "{{ rabbitmq_volume_name }}:/var/lib/rabbitmq"
-{% if rabbitmq_port %}
+{% if rabbitmq_port or rabbitmq_manager_port %}
     ports:
+{% if rabbitmq_port %}
       - "{{ rabbitmq_port }}:{{ rabbitmq_container_port }}"
+{% endif %}
+{% if rabbitmq_manager_port %}
+      - "{{ rabbitmq_manager_port }}:{{ rabbitmq_manager_container_port }}"
+{% endif %}
 {% endif %}
   
   redis:
@@ -110,6 +117,104 @@ services:
       - "{{ minio_console_port }}:{{ minio_console_container_port }}"
 {% endif %}
 {% endif %}
+
+  auth:
+    image: {{ auth_image }}
+    container_name: {{ auth_container_name }}
+    restart: always
+    environment:
+      HTTP_PORT_AUTH: {{ auth_container_port }}
+
+      RABBITMQ_AUTH_QUEUE_NAME: {{ services_common_config.rabbitmq_auth_queue_name }}
+      RABBITMQ_BOT_QUEUE_NAME: {{ services_common_config.rabbitmq_bot_queue_name }}
+      RABBITMQ_FILE_QUEUE_NAME: {{ services_common_config.rabbitmq_file_queue_name }}
+      RABBITMQ_NOTIFICATION_QUEUE_NAME: {{ services_common_config.rabbitmq_notification_queue_name }}
+      RABBITMQ_STORAGE_QUEUE_NAME: {{ services_common_config.rabbitmq_storage_queue_name }}
+      RABBITMQ_STORE_QUEUE_NAME: {{ services_common_config.rabbitmq_store_queue_name }}
+      RABBITMQ_TASK_QUEUE_NAME: {{ services_common_config.rabbitmq_task_queue_name }}
+      LOG_LEVEL: {{ services_common_config.log_level }}
+      CORS_ORIGINS: {{ services_common_config.cors_origins }}
+
+      POSTGRES_HOST: {{ services_common_secrets.postgres_host }}
+      POSTGRES_PORT: {{ services_common_secrets.postgres_port }}
+      POSTGRES_USERNAME: {{ services_common_secrets.postgres_username }}
+      POSTGRES_PASSWORD: {{ services_common_secrets.postgres_password }}
+      POSTGRES_SYNCHRONIZE: {{ services_common_secrets.postgres_synchronize }}
+      POSTGRES_AUTO_LOAD_ENTITIES: {{ services_common_secrets.postgres_auto_load_entities }}
+      RABBITMQ_URI: {{ services_common_secrets.rabbitmq_uri }}
+      RABBITMQ_DEFAULT_USER: {{ services_common_secrets.rabbitmq_default_user }}
+      RABBITMQ_DEFAULT_PASS: {{ services_common_secrets.rabbitmq_default_pass }}
+      REDIS_HOST: {{ services_common_secrets.redis_host }}
+      REDIS_PORT: {{ services_common_secrets.redis_port }}
+      REDIS_PASSWORD: {{ services_common_secrets.redis_password }}
+      REDIS_CACHE_TTL_GLOBAL: {{ services_common_secrets.redis_cache_ttl_global }}
+
+      POSTGRES_DATABASE_AUTH: {{ auth.postgre_database_name }}
+      REDIS_CACHE_KEY_PREFIX_AUTH: {{ auth.redis_cache_key_prefix }}
+      SWAGGER_SERVER_HOST: {{ auth.swagger_server_host }}
+      JWT_SECRET: "{{ auth.jwt_secret }}"
+      OTP_SMS_EXPIRATION: {{ auth.otp_sms_expiration }}
+      OTP_EMAIL_EXPIRATION: {{ auth.otp_email_expiration }}
+      COOKIE_CONFIG_SECURE: {{ auth.cookie_config_secure }}
+      COOKIE_CONFIG_SAME_SITE: {{ auth.cookie_config_same_site }}
+      COOKIE_CONFIG_DOMAIN: {{ auth.cookie_config_domain }}
+      DEFAULT_ACCESS_ID: {{ auth.default_access_id }}
+      JWT_EXPIRATION: {{ auth.jwt_expiration }}
+      DEFAULT_USER_FIRST_NAME: {{ auth.default_user_first_name }}
+      DEFAULT_USER_LAST_NAME: {{ auth.default_user_last_name }}
+
+    depends_on:
+      - rabbitmq
+      - postgres
+      - redis
+
+  store:
+    image: {{ store_image }}
+    container_name: {{ store_container_name }}
+    restart: always
+    environment:
+      HTTP_PORT_STORE: {{ store_container_port }}
+
+      RABBITMQ_AUTH_QUEUE_NAME: {{ services_common_config.rabbitmq_auth_queue_name }}
+      RABBITMQ_BOT_QUEUE_NAME: {{ services_common_config.rabbitmq_bot_queue_name }}
+      RABBITMQ_FILE_QUEUE_NAME: {{ services_common_config.rabbitmq_file_queue_name }}
+      RABBITMQ_NOTIFICATION_QUEUE_NAME: {{ services_common_config.rabbitmq_notification_queue_name }}
+      RABBITMQ_STORAGE_QUEUE_NAME: {{ services_common_config.rabbitmq_storage_queue_name }}
+      RABBITMQ_STORE_QUEUE_NAME: {{ services_common_config.rabbitmq_store_queue_name }}
+      RABBITMQ_TASK_QUEUE_NAME: {{ services_common_config.rabbitmq_task_queue_name }}
+      LOG_LEVEL: {{ services_common_config.log_level }}
+      CORS_ORIGINS: {{ services_common_config.cors_origins }}
+
+      POSTGRES_HOST: {{ services_common_secrets.postgres_host }}
+      POSTGRES_PORT: {{ services_common_secrets.postgres_port }}
+      POSTGRES_USERNAME: {{ services_common_secrets.postgres_username }}
+      POSTGRES_PASSWORD: {{ services_common_secrets.postgres_password }}
+      POSTGRES_SYNCHRONIZE: {{ services_common_secrets.postgres_synchronize }}
+      POSTGRES_AUTO_LOAD_ENTITIES: {{ services_common_secrets.postgres_auto_load_entities }}
+      RABBITMQ_URI: {{ services_common_secrets.rabbitmq_uri }}
+      RABBITMQ_DEFAULT_USER: {{ services_common_secrets.rabbitmq_default_user }}
+      RABBITMQ_DEFAULT_PASS: {{ services_common_secrets.rabbitmq_default_pass }}
+      REDIS_HOST: {{ services_common_secrets.redis_host }}
+      REDIS_PORT: {{ services_common_secrets.redis_port }}
+      REDIS_PASSWORD: {{ services_common_secrets.redis_password }}
+      REDIS_CACHE_TTL_GLOBAL: {{ services_common_secrets.redis_cache_ttl_global }}
+
+      POSTGRES_DATABASE_STORE: {{ store.postgre_database_name }}
+      REDIS_CACHE_KEY_PREFIX_STORE: {{ store.redis_cache_key_prefix }}
+      SWAGGER_SERVER_HOST: {{ store.swagger_server_host }}
+      INVOICE_DOWNLOAD_URL: {{ store.invoice_download_url }}
+      PAYMENT_SADAD_MERCHANT_ID: {{ store.payment_sadad_merchant_id }}
+      PAYMENT_SADAD_TERMINAL_ID: {{ store.payment_sadad_termianl_id }}
+      PAYMENT_SADAD_TERMINAL_KEY: {{ store.payment_sadad_terminal_key }}
+      PAYMENT_SADAD_RETURN_URL: {{ store.payment_sadad_return_url }}
+      PAYMENT_REDIRECT_TO_WEBSITE_URL: {{ store.payment_redirect_to_website_url }}
+      SALE_SUPPORT_PHONE_NUMBER_1: {{ store.sale_support_phone_number_1 }}
+      WEBSITE_ORDERS_LINK: {{ store.website_orders_link }}
+
+    depends_on:
+      - rabbitmq
+      - postgres
+      - redis
 
 volumes:
   {{ postgres_volume_name }}:

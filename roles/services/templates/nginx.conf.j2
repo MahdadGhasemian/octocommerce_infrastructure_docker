@@ -15,7 +15,7 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
 
-        proxy_pass http://{{ rabbitmq_container_name }}:{{ rabbitmq_container_port }};
+        proxy_pass http://{{ rabbitmq_container_name }}:{{ rabbitmq_manager_container_port }};
     }
 }
 
@@ -83,5 +83,41 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
 
         proxy_pass http://{{ redis_insight_container_name }}:{{ redis_insight_container_port }};
+    }
+}
+
+# API
+server {
+    listen 443 ssl;
+    listen [::]:443;
+    server_name {{ nginx_server_name_api }};
+
+    client_max_body_size 100M;
+
+    ssl_certificate /etc/nginx/ssl/ssl_certificate.crt;
+    ssl_certificate_key /etc/nginx/ssl/ssl_certificate.key;
+
+    location /auth/ {
+        proxy_redirect     off;
+
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+        proxy_set_header   X-Forwarded-Host $server_name;
+
+        proxy_pass http://{{ auth_container_name }}:{{ auth_container_port }}/;
+    }
+
+    location /store/ {
+        proxy_redirect     off;
+
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+        proxy_set_header   X-Forwarded-Host $server_name;
+
+        proxy_pass http://{{ store_container_name }}:{{ store_container_port }}/;
     }
 }
