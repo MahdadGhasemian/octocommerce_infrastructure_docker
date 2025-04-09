@@ -27,6 +27,7 @@ postgres_user: admin
 postgres_password: randompassword
 postgres_port:
 postgres_volume_name: postgres_data
+postgres_seed_data: "{{ service_directory_path }}/seed-data.sql"
 
 # PgAdmin
 pgadmin_image: elestio/pgadmin
@@ -93,13 +94,13 @@ services_common_secrets:
 
 # Services Common Config
 services_common_config:
-  rabbitmq_auth_queue_name: "auth"
-  rabbitmq_bot_queue_name: "bot"
-  rabbitmq_file_queue_name: "file"
-  rabbitmq_notification_queue_name: "notification"
-  rabbitmq_storage_queue_name: "storage"
-  rabbitmq_store_queue_name: "store"
-  rabbitmq_task_queue_name: "task"
+  rabbitmq_auth_queue_name: "production_auth"
+  rabbitmq_bot_queue_name: "production_bot"
+  rabbitmq_file_queue_name: "production_file"
+  rabbitmq_notification_queue_name: "production_notification"
+  rabbitmq_storage_queue_name: "production_storage"
+  rabbitmq_store_queue_name: "production_store"
+  rabbitmq_task_queue_name: "production_task"
   log_level: "debug"
   cors_origins: "https://{{ domain_name }},https://www.{{ domain_name }},https://panel.{{ domain_name }}"
 
@@ -107,48 +108,56 @@ services_common_config:
 auth_image: mahdad1988/octo-commerce-auth
 auth_container_name: auth
 auth_container_port: 4000
-auth_postgre_database_name: "auth"
-auth_redis_cache_key_prefix: "auth"
+auth_postgre_database_name: "production_auth"
+auth_redis_cache_key_prefix: "production_auth"
 auth_swagger_server_host: "https://api.{{ domain_name }}/auth/"
+
+# Bot
+bot_image: mahdad1988/octo-commerce-bot
+bot_container_name: bot
+bot_container_port: 4000
+bot_postgre_database_name: "production_bot"
+bot_redis_cache_key_prefix: "production_bot"
+bot_swagger_server_host: "https://api.{{ domain_name }}/bot/"
 
 # File
 file_image: mahdad1988/octo-commerce-file
 file_container_name: file
 file_container_port: 4000
-file_postgre_database_name: "file"
-file_redis_cache_key_prefix: "file"
+file_postgre_database_name: "production_file"
+file_redis_cache_key_prefix: "production_file"
 file_swagger_server_host: "https://api.{{ domain_name }}/file/"
 
 # NOTIFICATION
 notification_image: mahdad1988/octo-commerce-notification
 notification_container_name: notification
 notification_container_port: 4000
-notification_postgre_database_name: "notification"
-notification_redis_cache_key_prefix: "notification"
+notification_postgre_database_name: "production_notification"
+notification_redis_cache_key_prefix: "production_notification"
 notification_swagger_server_host: "https://api.{{ domain_name }}/notification/"
 
 # STORAGE
 storage_image: mahdad1988/octo-commerce-storage
 storage_container_name: storage
 storage_container_port: 4000
-storage_postgre_database_name: "storage"
-storage_redis_cache_key_prefix: "storage"
+storage_postgre_database_name: "production_storage"
+storage_redis_cache_key_prefix: "production_storage"
 storage_swagger_server_host: "https://api.{{ domain_name }}/storage/"
 
 # Store
 store_image: mahdad1988/octo-commerce-store
 store_container_name: store
 store_container_port: 4000
-store_postgre_database_name: "store"
-store_redis_cache_key_prefix: "store"
+store_postgre_database_name: "production_store"
+store_redis_cache_key_prefix: "production_store"
 store_swagger_server_host: "https://api.{{ domain_name }}/store/"
 
 # Task
 task_image: mahdad1988/octo-commerce-task
 task_container_name: task
 task_container_port: 4000
-task_postgre_database_name: "task"
-task_redis_cache_key_prefix: "task"
+task_postgre_database_name: "production_task"
+task_redis_cache_key_prefix: "production_task"
 task_swagger_server_host: "https://api.{{ domain_name }}/task/"
 
 # Common

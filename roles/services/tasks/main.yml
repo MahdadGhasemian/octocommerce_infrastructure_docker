@@ -29,6 +29,12 @@
     dest: "{{ redis_inside_auth_htpasswd }}"
     mode: "0644"
 
+- name: Template seed-data.sql
+  template:
+    src: seed-data.sql.j2
+    dest: "{{ postgres_seed_data }}"
+    mode: "0644"
+
 - name: Template docker-compose.yml
   template:
     src: docker-compose.yml.j2

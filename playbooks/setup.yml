@@ -17,6 +17,7 @@
 
         postgres_user: "{{ secrets.postgres_user }}"
         postgres_password: "{{ secrets.postgres_password }}"
+        postgres_port: "{{ secrets.postgres_external_port }}"
         pgadmin_user: "{{ secrets.pgadmin_user }}"
         pgadmin_password: "{{ secrets.pgadmin_password }}"
         rabbitmq_user: "{{ secrets.rabbitmq_user }}"

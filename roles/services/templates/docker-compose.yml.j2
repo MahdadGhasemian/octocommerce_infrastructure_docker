@@ -31,6 +31,7 @@ services:
       POSTGRES_PASSWORD: {{ postgres_password }}
     volumes:
       - "{{ postgres_volume_name }}:/var/lib/postgresql/data"
+      - "{{ postgres_seed_data }}:/docker-entrypoint-initdb.d/seed-data.sql:ro"
 {% if postgres_port %}
     ports:
       - "{{ postgres_port }}:{{ postgres_container_port }}"
