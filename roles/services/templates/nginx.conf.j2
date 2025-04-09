@@ -120,4 +120,52 @@ server {
 
         proxy_pass http://{{ store_container_name }}:{{ store_container_port }}/;
     }
+
+    location /storage/ {
+        proxy_redirect     off;
+
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+        proxy_set_header   X-Forwarded-Host $server_name;
+
+        proxy_pass http://{{ storage_container_name }}:{{ storage_container_port }}/;
+    }
+
+    location /notification/ {
+        proxy_redirect     off;
+
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+        proxy_set_header   X-Forwarded-Host $server_name;
+
+        proxy_pass http://{{ notification_container_name }}:{{ notification_container_port }}/;
+    }
+
+    location /file/ {
+        proxy_redirect     off;
+
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+        proxy_set_header   X-Forwarded-Host $server_name;
+
+        proxy_pass http://{{ file_container_name }}:{{ file_container_port }}/;
+    }
+
+    location /task/ {
+        proxy_redirect     off;
+
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+        proxy_set_header   X-Forwarded-Host $server_name;
+
+        proxy_pass http://{{ task_container_name }}:{{ task_container_port }}/;
+    }
 }

@@ -149,19 +149,179 @@ services:
       REDIS_PASSWORD: {{ services_common_secrets.redis_password }}
       REDIS_CACHE_TTL_GLOBAL: {{ services_common_secrets.redis_cache_ttl_global }}
 
-      POSTGRES_DATABASE_AUTH: {{ auth.postgre_database_name }}
-      REDIS_CACHE_KEY_PREFIX_AUTH: {{ auth.redis_cache_key_prefix }}
-      SWAGGER_SERVER_HOST: {{ auth.swagger_server_host }}
-      JWT_SECRET: "{{ auth.jwt_secret }}"
-      OTP_SMS_EXPIRATION: {{ auth.otp_sms_expiration }}
-      OTP_EMAIL_EXPIRATION: {{ auth.otp_email_expiration }}
-      COOKIE_CONFIG_SECURE: {{ auth.cookie_config_secure }}
-      COOKIE_CONFIG_SAME_SITE: {{ auth.cookie_config_same_site }}
-      COOKIE_CONFIG_DOMAIN: {{ auth.cookie_config_domain }}
-      DEFAULT_ACCESS_ID: {{ auth.default_access_id }}
-      JWT_EXPIRATION: {{ auth.jwt_expiration }}
-      DEFAULT_USER_FIRST_NAME: {{ auth.default_user_first_name }}
-      DEFAULT_USER_LAST_NAME: {{ auth.default_user_last_name }}
+      POSTGRES_DATABASE_AUTH: {{ auth_postgre_database_name }}
+      REDIS_CACHE_KEY_PREFIX_AUTH: {{ auth_redis_cache_key_prefix }}
+      SWAGGER_SERVER_HOST: {{ auth_swagger_server_host }}
+      JWT_SECRET: "{{ jwt_secret }}"
+      OTP_SMS_EXPIRATION: {{ otp_sms_expiration }}
+      OTP_EMAIL_EXPIRATION: {{ otp_email_expiration }}
+      COOKIE_CONFIG_SECURE: {{ cookie_config_secure }}
+      COOKIE_CONFIG_SAME_SITE: {{ cookie_config_same_site }}
+      COOKIE_CONFIG_DOMAIN: {{ cookie_config_domain }}
+      DEFAULT_ACCESS_ID: {{ default_access_id }}
+      JWT_EXPIRATION: {{ jwt_expiration }}
+      DEFAULT_USER_FIRST_NAME: {{ default_user_first_name }}
+      DEFAULT_USER_LAST_NAME: {{ default_user_last_name }}
+
+    depends_on:
+      - rabbitmq
+      - postgres
+      - redis
+
+  file:
+    image: {{ file_image }}
+    container_name: {{ file_container_name }}
+    restart: always
+    environment:
+      HTTP_PORT_FILE: {{ file_container_port }}
+
+      RABBITMQ_AUTH_QUEUE_NAME: {{ services_common_config.rabbitmq_auth_queue_name }}
+      RABBITMQ_BOT_QUEUE_NAME: {{ services_common_config.rabbitmq_bot_queue_name }}
+      RABBITMQ_FILE_QUEUE_NAME: {{ services_common_config.rabbitmq_file_queue_name }}
+      RABBITMQ_NOTIFICATION_QUEUE_NAME: {{ services_common_config.rabbitmq_notification_queue_name }}
+      RABBITMQ_STORAGE_QUEUE_NAME: {{ services_common_config.rabbitmq_storage_queue_name }}
+      RABBITMQ_STORE_QUEUE_NAME: {{ services_common_config.rabbitmq_store_queue_name }}
+      RABBITMQ_TASK_QUEUE_NAME: {{ services_common_config.rabbitmq_task_queue_name }}
+      LOG_LEVEL: {{ services_common_config.log_level }}
+      CORS_ORIGINS: {{ services_common_config.cors_origins }}
+
+      POSTGRES_HOST: {{ services_common_secrets.postgres_host }}
+      POSTGRES_PORT: {{ services_common_secrets.postgres_port }}
+      POSTGRES_USERNAME: {{ services_common_secrets.postgres_username }}
+      POSTGRES_PASSWORD: {{ services_common_secrets.postgres_password }}
+      POSTGRES_SYNCHRONIZE: {{ services_common_secrets.postgres_synchronize }}
+      POSTGRES_AUTO_LOAD_ENTITIES: {{ services_common_secrets.postgres_auto_load_entities }}
+      RABBITMQ_URI: {{ services_common_secrets.rabbitmq_uri }}
+      RABBITMQ_DEFAULT_USER: {{ services_common_secrets.rabbitmq_default_user }}
+      RABBITMQ_DEFAULT_PASS: {{ services_common_secrets.rabbitmq_default_pass }}
+      REDIS_HOST: {{ services_common_secrets.redis_host }}
+      REDIS_PORT: {{ services_common_secrets.redis_port }}
+      REDIS_PASSWORD: {{ services_common_secrets.redis_password }}
+      REDIS_CACHE_TTL_GLOBAL: {{ services_common_secrets.redis_cache_ttl_global }}
+
+      POSTGRES_DATABASE_FILE: {{ file_postgre_database_name }}
+      REDIS_CACHE_KEY_PREFIX_FILE: {{ file_redis_cache_key_prefix }}
+      SWAGGER_SERVER_HOST: {{ file_swagger_server_host }}
+      INVOICE_UPLOAD_URL: {{ invoice_upload_url }}
+      INVOICE_GENERATE_TEMPORARY_PATH: {{ invoice_generate_temporary_path }}
+      INVOICE_TEMPLATE_PATH: {{ invoice_template_path }}
+      CHROMIUM_PATH: {{ chromium_path }}
+      CLIENT_TIMEZONE: {{ client_timezone }}
+  
+  notification:
+    image: {{ notification_image }}
+    container_name: {{ notification_container_name }}
+    restart: always
+    environment:
+      HTTP_PORT_NOTIFICATION: {{ notification_container_port }}
+
+      RABBITMQ_AUTH_QUEUE_NAME: {{ services_common_config.rabbitmq_auth_queue_name }}
+      RABBITMQ_BOT_QUEUE_NAME: {{ services_common_config.rabbitmq_bot_queue_name }}
+      RABBITMQ_FILE_QUEUE_NAME: {{ services_common_config.rabbitmq_file_queue_name }}
+      RABBITMQ_NOTIFICATION_QUEUE_NAME: {{ services_common_config.rabbitmq_notification_queue_name }}
+      RABBITMQ_STORAGE_QUEUE_NAME: {{ services_common_config.rabbitmq_storage_queue_name }}
+      RABBITMQ_STORE_QUEUE_NAME: {{ services_common_config.rabbitmq_store_queue_name }}
+      RABBITMQ_TASK_QUEUE_NAME: {{ services_common_config.rabbitmq_task_queue_name }}
+      LOG_LEVEL: {{ services_common_config.log_level }}
+      CORS_ORIGINS: {{ services_common_config.cors_origins }}
+
+      POSTGRES_HOST: {{ services_common_secrets.postgres_host }}
+      POSTGRES_PORT: {{ services_common_secrets.postgres_port }}
+      POSTGRES_USERNAME: {{ services_common_secrets.postgres_username }}
+      POSTGRES_PASSWORD: {{ services_common_secrets.postgres_password }}
+      POSTGRES_SYNCHRONIZE: {{ services_common_secrets.postgres_synchronize }}
+      POSTGRES_AUTO_LOAD_ENTITIES: {{ services_common_secrets.postgres_auto_load_entities }}
+      RABBITMQ_URI: {{ services_common_secrets.rabbitmq_uri }}
+      RABBITMQ_DEFAULT_USER: {{ services_common_secrets.rabbitmq_default_user }}
+      RABBITMQ_DEFAULT_PASS: {{ services_common_secrets.rabbitmq_default_pass }}
+      REDIS_HOST: {{ services_common_secrets.redis_host }}
+      REDIS_PORT: {{ services_common_secrets.redis_port }}
+      REDIS_PASSWORD: {{ services_common_secrets.redis_password }}
+      REDIS_CACHE_TTL_GLOBAL: {{ services_common_secrets.redis_cache_ttl_global }}
+
+      POSTGRES_DATABASE_NOTIFICATION: {{ notification_postgre_database_name }}
+      REDIS_CACHE_KEY_PREFIX_NOTIFICATION: {{ notification_redis_cache_key_prefix }}
+      SWAGGER_SERVER_HOST: {{ notification_swagger_server_host }}
+      NOTIFICATION_ACCESS_READ_EXPIRATION: {{ notification_access_read_expiration }}
+      SMS_MELIPEYAMAK_URL: {{ sms_melipeyamak_url }}
+      SMS_MELIPEYAMAK_USERNAME: {{ sms_melipeyamak_username }}
+      SMS_MELIPEYAMAK_PASSWORD: {{ sms_melipeyamak_password }}
+      SALE_SUPPORT_PHONE_NUMBER_1: {{ sale_support_phone_number_1 }}
+      WEBSITE_ORDERS_LINK: {{ website_orders_link }}
+      SMS_MELIPEYAMAK_TEMPLATE_ACCOUNT_1: {{ sms_melipeyamak_template_account_1 }}
+      SMS_MELIPEYAMAK_TEMPLATE_ACCOUNT_2: {{ sms_melipeyamak_template_account_2 }}
+      SMS_MELIPEYAMAK_TEMPLATE_ACCOUNT_3: {{ sms_melipeyamak_template_account_3 }}
+      SMS_MELIPEYAMAK_TEMPLATE_ACCOUNT_4: {{ sms_melipeyamak_template_account_4 }}
+      SMS_MELIPEYAMAK_TEMPLATE_ACCOUNT_5: {{ sms_melipeyamak_template_account_5 }}
+      SMS_MELIPEYAMAK_TEMPLATE_ORDER_1: {{ sms_melipeyamak_template_order_1 }}
+      SMS_MELIPEYAMAK_TEMPLATE_ORDER_2: {{ sms_melipeyamak_template_order_2 }}
+      SMS_MELIPEYAMAK_TEMPLATE_ORDER_3: {{ sms_melipeyamak_template_order_3 }}
+      SMS_MELIPEYAMAK_TEMPLATE_ORDER_4: {{ sms_melipeyamak_template_order_4 }}
+      SMS_MELIPEYAMAK_TEMPLATE_ORDER_5: {{ sms_melipeyamak_template_order_5 }}
+      SMS_MELIPEYAMAK_TEMPLATE_ORDER_6: {{ sms_melipeyamak_template_order_6 }}
+      SMS_MELIPEYAMAK_TEMPLATE_PAYMENT_1: {{ sms_melipeyamak_template_payment_1 }}
+      SMS_MELIPEYAMAK_TEMPLATE_PAYMENT_2: {{ sms_melipeyamak_template_payment_2 }}
+      SMS_MELIPEYAMAK_TEMPLATE_PAYMENT_3: {{ sms_melipeyamak_template_payment_3 }}
+      SMS_MELIPEYAMAK_TEMPLATE_PAYMENT_4: {{ sms_melipeyamak_template_payment_4 }}
+      SMS_MELIPEYAMAK_TEMPLATE_PAYMENT_5: {{ sms_melipeyamak_template_payment_5 }}
+      SMS_MELIPEYAMAK_TEMPLATE_PAYMENT_6: {{ sms_melipeyamak_template_payment_6 }}
+      SMS_MELIPEYAMAK_TEMPLATE_DELIVERY_1: {{ sms_melipeyamak_template_delivery_1 }}
+      SMS_MELIPEYAMAK_TEMPLATE_DELIVERY_2: {{ sms_melipeyamak_template_delivery_2 }}
+      SMS_MELIPEYAMAK_TEMPLATE_DELIVERY_3: {{ sms_melipeyamak_template_delivery_3 }}
+      SMS_MELIPEYAMAK_TEMPLATE_DELIVERY_4: {{ sms_melipeyamak_template_delivery_4 }}
+      SMS_MELIPEYAMAK_TEMPLATE_DELIVERY_5: {{ sms_melipeyamak_template_delivery_5 }}
+      SMS_MELIPEYAMAK_TEMPLATE_PROMOTION_1: {{ sms_melipeyamak_template_promotion_1 }}
+      SMS_MELIPEYAMAK_TEMPLATE_PROMOTION_2: {{ sms_melipeyamak_template_promotion_2 }}
+      SMS_MELIPEYAMAK_TEMPLATE_SUPPORT_1: {{ sms_melipeyamak_template_support_1 }}
+      SMS_MELIPEYAMAK_TEMPLATE_SUPPORT_2: {{ sms_melipeyamak_template_support_2 }}
+      SMS_MELIPEYAMAK_TEMPLATE_SUPPORT_3: {{ sms_melipeyamak_template_support_3 }}
+      SMS_MELIPEYAMAK_TEMPLATE_INTERAL_1: {{ sms_melipeyamak_template_interal_1 }}
+      SMS_MELIPEYAMAK_TEMPLATE_INTERAL_2: {{ sms_melipeyamak_template_interal_2 }}
+      SMS_MELIPEYAMAK_TEMPLATE_INTERAL_3: {{ sms_melipeyamak_template_interal_3 }}
+
+  storage:
+    image: {{ storage_image }}
+    container_name: {{ storage_container_name }}
+    restart: always
+    environment:
+      HTTP_PORT_STORAGE: {{ storage_container_port }}
+
+      RABBITMQ_AUTH_QUEUE_NAME: {{ services_common_config.rabbitmq_auth_queue_name }}
+      RABBITMQ_BOT_QUEUE_NAME: {{ services_common_config.rabbitmq_bot_queue_name }}
+      RABBITMQ_FILE_QUEUE_NAME: {{ services_common_config.rabbitmq_file_queue_name }}
+      RABBITMQ_NOTIFICATION_QUEUE_NAME: {{ services_common_config.rabbitmq_notification_queue_name }}
+      RABBITMQ_STORAGE_QUEUE_NAME: {{ services_common_config.rabbitmq_storage_queue_name }}
+      RABBITMQ_STORE_QUEUE_NAME: {{ services_common_config.rabbitmq_store_queue_name }}
+      RABBITMQ_TASK_QUEUE_NAME: {{ services_common_config.rabbitmq_task_queue_name }}
+      LOG_LEVEL: {{ services_common_config.log_level }}
+      CORS_ORIGINS: {{ services_common_config.cors_origins }}
+
+      POSTGRES_HOST: {{ services_common_secrets.postgres_host }}
+      POSTGRES_PORT: {{ services_common_secrets.postgres_port }}
+      POSTGRES_USERNAME: {{ services_common_secrets.postgres_username }}
+      POSTGRES_PASSWORD: {{ services_common_secrets.postgres_password }}
+      POSTGRES_SYNCHRONIZE: {{ services_common_secrets.postgres_synchronize }}
+      POSTGRES_AUTO_LOAD_ENTITIES: {{ services_common_secrets.postgres_auto_load_entities }}
+      RABBITMQ_URI: {{ services_common_secrets.rabbitmq_uri }}
+      RABBITMQ_DEFAULT_USER: {{ services_common_secrets.rabbitmq_default_user }}
+      RABBITMQ_DEFAULT_PASS: {{ services_common_secrets.rabbitmq_default_pass }}
+      REDIS_HOST: {{ services_common_secrets.redis_host }}
+      REDIS_PORT: {{ services_common_secrets.redis_port }}
+      REDIS_PASSWORD: {{ services_common_secrets.redis_password }}
+      REDIS_CACHE_TTL_GLOBAL: {{ services_common_secrets.redis_cache_ttl_global }}
+
+      POSTGRES_DATABASE_STORAGE: {{ storage_postgre_database_name }}
+      REDIS_CACHE_KEY_PREFIX_STORAGE: {{ storage_redis_cache_key_prefix }}
+      SWAGGER_SERVER_HOST: {{ storage_swagger_server_host }}
+      MINIO_ENDPOINT: {{ minio_endpoint }}
+      MINIO_ACCESS_KEY: {{ minio_access_key }}
+      MINIO_SECRET_KEY: {{ minio_secret_key }}
+      MINIO_USE_SSL: {{ minio_use_ssl }}
+      MINIO_PORT: {{ minio_port }}
+      MINIO_BASE_URL: {{ minio_base_url }}
+      UPLOAD_FILE_MAX_SIZE: {{ upload_file_max_size }}
+      BASE_PRIVATE_URL_DOWNLOAD: {{ base_private_url_download }}
+      BASE_PUBLIC_URL_DOWNLOAD: {{ base_public_url_download }}
 
     depends_on:
       - rabbitmq
@@ -199,22 +359,52 @@ services:
       REDIS_PASSWORD: {{ services_common_secrets.redis_password }}
       REDIS_CACHE_TTL_GLOBAL: {{ services_common_secrets.redis_cache_ttl_global }}
 
-      POSTGRES_DATABASE_STORE: {{ store.postgre_database_name }}
-      REDIS_CACHE_KEY_PREFIX_STORE: {{ store.redis_cache_key_prefix }}
-      SWAGGER_SERVER_HOST: {{ store.swagger_server_host }}
-      INVOICE_DOWNLOAD_URL: {{ store.invoice_download_url }}
-      PAYMENT_SADAD_MERCHANT_ID: {{ store.payment_sadad_merchant_id }}
-      PAYMENT_SADAD_TERMINAL_ID: {{ store.payment_sadad_termianl_id }}
-      PAYMENT_SADAD_TERMINAL_KEY: {{ store.payment_sadad_terminal_key }}
-      PAYMENT_SADAD_RETURN_URL: {{ store.payment_sadad_return_url }}
-      PAYMENT_REDIRECT_TO_WEBSITE_URL: {{ store.payment_redirect_to_website_url }}
-      SALE_SUPPORT_PHONE_NUMBER_1: {{ store.sale_support_phone_number_1 }}
-      WEBSITE_ORDERS_LINK: {{ store.website_orders_link }}
+      POSTGRES_DATABASE_STORE: {{ store_postgre_database_name }}
+      REDIS_CACHE_KEY_PREFIX_STORE: {{ store_redis_cache_key_prefix }}
+      SWAGGER_SERVER_HOST: {{ store_swagger_server_host }}
+      INVOICE_DOWNLOAD_URL: {{ invoice_download_url }}
+      PAYMENT_SADAD_MERCHANT_ID: {{ payment_sadad_merchant_id }}
+      PAYMENT_SADAD_TERMINAL_ID: {{ payment_sadad_termianl_id }}
+      PAYMENT_SADAD_TERMINAL_KEY: {{ payment_sadad_terminal_key }}
+      PAYMENT_SADAD_RETURN_URL: {{ payment_sadad_return_url }}
+      PAYMENT_REDIRECT_TO_WEBSITE_URL: {{ payment_redirect_to_website_url }}
+      SALE_SUPPORT_PHONE_NUMBER_1: {{ sale_support_phone_number_1 }}
+      WEBSITE_ORDERS_LINK: {{ website_orders_link }}
 
-    depends_on:
-      - rabbitmq
-      - postgres
-      - redis
+  task:
+    image: {{ task_image }}
+    container_name: {{ task_container_name }}
+    restart: always
+    environment:
+      HTTP_PORT_TASK: {{ task_container_port }}
+
+      RABBITMQ_AUTH_QUEUE_NAME: {{ services_common_config.rabbitmq_auth_queue_name }}
+      RABBITMQ_BOT_QUEUE_NAME: {{ services_common_config.rabbitmq_bot_queue_name }}
+      RABBITMQ_FILE_QUEUE_NAME: {{ services_common_config.rabbitmq_file_queue_name }}
+      RABBITMQ_NOTIFICATION_QUEUE_NAME: {{ services_common_config.rabbitmq_notification_queue_name }}
+      RABBITMQ_STORAGE_QUEUE_NAME: {{ services_common_config.rabbitmq_storage_queue_name }}
+      RABBITMQ_STORE_QUEUE_NAME: {{ services_common_config.rabbitmq_store_queue_name }}
+      RABBITMQ_TASK_QUEUE_NAME: {{ services_common_config.rabbitmq_task_queue_name }}
+      LOG_LEVEL: {{ services_common_config.log_level }}
+      CORS_ORIGINS: {{ services_common_config.cors_origins }}
+
+      POSTGRES_HOST: {{ services_common_secrets.postgres_host }}
+      POSTGRES_PORT: {{ services_common_secrets.postgres_port }}
+      POSTGRES_USERNAME: {{ services_common_secrets.postgres_username }}
+      POSTGRES_PASSWORD: {{ services_common_secrets.postgres_password }}
+      POSTGRES_SYNCHRONIZE: {{ services_common_secrets.postgres_synchronize }}
+      POSTGRES_AUTO_LOAD_ENTITIES: {{ services_common_secrets.postgres_auto_load_entities }}
+      RABBITMQ_URI: {{ services_common_secrets.rabbitmq_uri }}
+      RABBITMQ_DEFAULT_USER: {{ services_common_secrets.rabbitmq_default_user }}
+      RABBITMQ_DEFAULT_PASS: {{ services_common_secrets.rabbitmq_default_pass }}
+      REDIS_HOST: {{ services_common_secrets.redis_host }}
+      REDIS_PORT: {{ services_common_secrets.redis_port }}
+      REDIS_PASSWORD: {{ services_common_secrets.redis_password }}
+      REDIS_CACHE_TTL_GLOBAL: {{ services_common_secrets.redis_cache_ttl_global }}
+
+      POSTGRES_DATABASE_TASK: {{ task_postgre_database_name }}
+      REDIS_CACHE_KEY_PREFIX_TASK: {{ task_redis_cache_key_prefix }}
+      SWAGGER_SERVER_HOST: {{ task_swagger_server_host }}
 
 volumes:
   {{ postgres_volume_name }}:
