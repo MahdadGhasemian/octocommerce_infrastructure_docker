@@ -132,7 +132,6 @@ services:
       RABBITMQ_NOTIFICATION_QUEUE_NAME: {{ services_common_config.rabbitmq_notification_queue_name }}
       RABBITMQ_STORAGE_QUEUE_NAME: {{ services_common_config.rabbitmq_storage_queue_name }}
       RABBITMQ_STORE_QUEUE_NAME: {{ services_common_config.rabbitmq_store_queue_name }}
-      RABBITMQ_TASK_QUEUE_NAME: {{ services_common_config.rabbitmq_task_queue_name }}
       LOG_LEVEL: {{ services_common_config.log_level }}
       CORS_ORIGINS: {{ services_common_config.cors_origins }}
 
@@ -182,7 +181,6 @@ services:
       RABBITMQ_NOTIFICATION_QUEUE_NAME: {{ services_common_config.rabbitmq_notification_queue_name }}
       RABBITMQ_STORAGE_QUEUE_NAME: {{ services_common_config.rabbitmq_storage_queue_name }}
       RABBITMQ_STORE_QUEUE_NAME: {{ services_common_config.rabbitmq_store_queue_name }}
-      RABBITMQ_TASK_QUEUE_NAME: {{ services_common_config.rabbitmq_task_queue_name }}
       LOG_LEVEL: {{ services_common_config.log_level }}
       CORS_ORIGINS: {{ services_common_config.cors_origins }}
 
@@ -222,7 +220,6 @@ services:
       RABBITMQ_NOTIFICATION_QUEUE_NAME: {{ services_common_config.rabbitmq_notification_queue_name }}
       RABBITMQ_STORAGE_QUEUE_NAME: {{ services_common_config.rabbitmq_storage_queue_name }}
       RABBITMQ_STORE_QUEUE_NAME: {{ services_common_config.rabbitmq_store_queue_name }}
-      RABBITMQ_TASK_QUEUE_NAME: {{ services_common_config.rabbitmq_task_queue_name }}
       LOG_LEVEL: {{ services_common_config.log_level }}
       CORS_ORIGINS: {{ services_common_config.cors_origins }}
 
@@ -293,7 +290,6 @@ services:
       RABBITMQ_NOTIFICATION_QUEUE_NAME: {{ services_common_config.rabbitmq_notification_queue_name }}
       RABBITMQ_STORAGE_QUEUE_NAME: {{ services_common_config.rabbitmq_storage_queue_name }}
       RABBITMQ_STORE_QUEUE_NAME: {{ services_common_config.rabbitmq_store_queue_name }}
-      RABBITMQ_TASK_QUEUE_NAME: {{ services_common_config.rabbitmq_task_queue_name }}
       LOG_LEVEL: {{ services_common_config.log_level }}
       CORS_ORIGINS: {{ services_common_config.cors_origins }}
 
@@ -342,7 +338,6 @@ services:
       RABBITMQ_NOTIFICATION_QUEUE_NAME: {{ services_common_config.rabbitmq_notification_queue_name }}
       RABBITMQ_STORAGE_QUEUE_NAME: {{ services_common_config.rabbitmq_storage_queue_name }}
       RABBITMQ_STORE_QUEUE_NAME: {{ services_common_config.rabbitmq_store_queue_name }}
-      RABBITMQ_TASK_QUEUE_NAME: {{ services_common_config.rabbitmq_task_queue_name }}
       LOG_LEVEL: {{ services_common_config.log_level }}
       CORS_ORIGINS: {{ services_common_config.cors_origins }}
 
@@ -371,41 +366,6 @@ services:
       PAYMENT_REDIRECT_TO_WEBSITE_URL: {{ payment_redirect_to_website_url }}
       SALE_SUPPORT_PHONE_NUMBER_1: {{ sale_support_phone_number_1 }}
       WEBSITE_ORDERS_LINK: {{ website_orders_link }}
-
-  task:
-    image: {{ task_image }}
-    container_name: {{ task_container_name }}
-    restart: always
-    environment:
-      HTTP_PORT_TASK: {{ task_container_port }}
-
-      RABBITMQ_AUTH_QUEUE_NAME: {{ services_common_config.rabbitmq_auth_queue_name }}
-      RABBITMQ_BOT_QUEUE_NAME: {{ services_common_config.rabbitmq_bot_queue_name }}
-      RABBITMQ_FILE_QUEUE_NAME: {{ services_common_config.rabbitmq_file_queue_name }}
-      RABBITMQ_NOTIFICATION_QUEUE_NAME: {{ services_common_config.rabbitmq_notification_queue_name }}
-      RABBITMQ_STORAGE_QUEUE_NAME: {{ services_common_config.rabbitmq_storage_queue_name }}
-      RABBITMQ_STORE_QUEUE_NAME: {{ services_common_config.rabbitmq_store_queue_name }}
-      RABBITMQ_TASK_QUEUE_NAME: {{ services_common_config.rabbitmq_task_queue_name }}
-      LOG_LEVEL: {{ services_common_config.log_level }}
-      CORS_ORIGINS: {{ services_common_config.cors_origins }}
-
-      POSTGRES_HOST: {{ services_common_secrets.postgres_host }}
-      POSTGRES_PORT: {{ services_common_secrets.postgres_port }}
-      POSTGRES_USERNAME: {{ services_common_secrets.postgres_username }}
-      POSTGRES_PASSWORD: {{ services_common_secrets.postgres_password }}
-      POSTGRES_SYNCHRONIZE: {{ services_common_secrets.postgres_synchronize }}
-      POSTGRES_AUTO_LOAD_ENTITIES: {{ services_common_secrets.postgres_auto_load_entities }}
-      RABBITMQ_URI: {{ services_common_secrets.rabbitmq_uri }}
-      RABBITMQ_DEFAULT_USER: {{ services_common_secrets.rabbitmq_default_user }}
-      RABBITMQ_DEFAULT_PASS: {{ services_common_secrets.rabbitmq_default_pass }}
-      REDIS_HOST: {{ services_common_secrets.redis_host }}
-      REDIS_PORT: {{ services_common_secrets.redis_port }}
-      REDIS_PASSWORD: {{ services_common_secrets.redis_password }}
-      REDIS_CACHE_TTL_GLOBAL: {{ services_common_secrets.redis_cache_ttl_global }}
-
-      POSTGRES_DATABASE_TASK: {{ task_postgre_database_name }}
-      REDIS_CACHE_KEY_PREFIX_TASK: {{ task_redis_cache_key_prefix }}
-      SWAGGER_SERVER_HOST: {{ task_swagger_server_host }}
 
 volumes:
   {{ postgres_volume_name }}:

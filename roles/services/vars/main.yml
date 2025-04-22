@@ -100,7 +100,6 @@ services_common_config:
   rabbitmq_notification_queue_name: "production_notification"
   rabbitmq_storage_queue_name: "production_storage"
   rabbitmq_store_queue_name: "production_store"
-  rabbitmq_task_queue_name: "production_task"
   log_level: "debug"
   cors_origins: "https://{{ domain_name }},https://www.{{ domain_name }},https://panel.{{ domain_name }}"
 
@@ -151,14 +150,6 @@ store_container_port: 4000
 store_postgre_database_name: "production_store"
 store_redis_cache_key_prefix: "production_store"
 store_swagger_server_host: "https://api.{{ domain_name }}/store/"
-
-# Task
-task_image: mahdad1988/octo-commerce-task
-task_container_name: task
-task_container_port: 4000
-task_postgre_database_name: "production_task"
-task_redis_cache_key_prefix: "production_task"
-task_swagger_server_host: "https://api.{{ domain_name }}/task/"
 
 # Common
 jwt_secret: "longsecretphrase"
